@@ -14,11 +14,11 @@ public class Reader {
     LAST_ID = 1;
   }
 
-  public Reader(String firstName, String lastName, int year, int month, int day) {
+  public Reader(String firstName, String lastName, LocalDate date) {
     this.id = LAST_ID++;
     this.firstName = firstName;
     this.lastName = lastName;
-    this.birthDate = LocalDate.of(year, month, day);
+    this.birthDate = date;
     this.borrowedBooks = new ArrayList<>();
   }
 

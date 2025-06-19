@@ -3,6 +3,7 @@ public class Book {
   private final long id;
   private String title;
   private String author;
+  private String publishingHouse;
   private int year;
   private boolean isAvailable;
 
@@ -10,10 +11,11 @@ public class Book {
     LAST_ID = 1;
   }
 
-  public Book(String title, String author, int year) {
+  public Book(String title, String author, String publishingHouse, int year) {
     this.id = LAST_ID++;
     this.title = title;
     this.author = author;
+    this.publishingHouse = publishingHouse;
     this.year = year;
     this.isAvailable = true;
   }
@@ -30,6 +32,10 @@ public class Book {
     return author;
   }
 
+  public String getPublishingHouse() {
+    return publishingHouse;
+  }
+
   public int getYear() {
     return year;
   }
@@ -44,6 +50,10 @@ public class Book {
 
   public void setAuthor(String author) {
     this.author = author;
+  }
+
+  public void setPublishingHouse(String publishingHouse) {
+    this.publishingHouse = publishingHouse;
   }
 
   public void setYear(int year) {

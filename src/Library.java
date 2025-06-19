@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,16 +22,22 @@ public class Library {
     this.name = name;
   }
 
-  public boolean addBock(String title, String author, int year){
-    Book book = new Book(title, author, year);
+  public List<Book> getBooks() {
+    return books;
+  }
+
+  public List<Reader> getReaders() {
+    return readers;
+  }
+
+  public boolean addBock(String title, String author, String publishingHouse, int year){
+    Book book = new Book(title, author, publishingHouse, year);
     books.add(book);
     return true;
   }
 
-  public boolean registerUser(String firstName, String lastName, int year, int month, int day){
-    Reader reader = new Reader(firstName, lastName, year, month, day);
+  public void registerUser(Reader reader){
     readers.add(reader);
-    return true;
   }
 
   public boolean borrowBook(int bookIndex, int userIndex){
