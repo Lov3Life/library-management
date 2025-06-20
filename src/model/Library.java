@@ -1,3 +1,5 @@
+package model;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +30,11 @@ public class Library {
     return readers;
   }
 
-  public void addBock(Book book){
+  public void addBock(Book book) {
     books.add(book);
   }
 
-  public void registerUser(Reader reader){
+  public void registerUser(Reader reader) {
     readers.add(reader);
   }
 

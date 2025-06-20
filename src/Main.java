@@ -1,3 +1,6 @@
+import app.LibraryApp;
+import model.*;
+
 import java.time.LocalDate;
 
 public class Main {
@@ -8,7 +11,7 @@ public class Main {
     library.addBock(book1);
     library.addBock(book2);
     Reader reader1 = new Reader("Jan", "Kowalski", LocalDate.of(1988, 12, 12));
-    Reader reader2 = new Reader("Jan", "Kowalski", LocalDate.of(1988, 12, 12));
+    Reader reader2 = new Reader("Basia", "Nowak", LocalDate.of(1999, 3, 16));
     library.registerUser(reader1);
     library.registerUser(reader2);
 //    System.out.println(library.listAvailableBooks());

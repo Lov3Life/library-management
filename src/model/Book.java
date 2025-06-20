@@ -1,3 +1,5 @@
+package model;
+
 public class Book {
   private static long LAST_ID;
   private final long id;
