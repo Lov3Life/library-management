@@ -4,11 +4,11 @@ import java.util.List;
 
 public class Reader {
   private static long LAST_ID;
-  private long id;
+  private final long id;
   private String firstName;
   private String lastName;
   private LocalDate birthDate;
-  private List<Book> borrowedBooks;
+  private final List<Book> borrowedBooks;
 
   static {
     LAST_ID = 1;
@@ -56,11 +56,22 @@ public class Reader {
 
   @Override
   public String toString() {
+    StringBuilder borrowedBooksString = new StringBuilder();
+    if(borrowedBooks.isEmpty()){
+      borrowedBooksString.append("any books borrowed");
+    }else {
+      String prefix = "";
+      for(Book book : borrowedBooks){
+        borrowedBooksString.append(prefix).append(book.getId());
+        prefix = ",";
+      }
+    }
     return "Reader{" +
             "id=" + id +
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", birthDate=" + birthDate +
+            ", borrowedBooks (ID's)=" + borrowedBooksString +
             '}';
   }
 }

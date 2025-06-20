@@ -4,20 +4,20 @@ public class Book {
   private String title;
   private String author;
   private String publishingHouse;
-  private int year;
-  private boolean isAvailable;
+  private Integer year;
+  private Reader borrowedBy;
 
   static {
     LAST_ID = 1;
   }
 
-  public Book(String title, String author, String publishingHouse, int year) {
+  public Book(String title, String author, String publishingHouse, Integer year) {
     this.id = LAST_ID++;
     this.title = title;
     this.author = author;
     this.publishingHouse = publishingHouse;
     this.year = year;
-    this.isAvailable = true;
+    this.borrowedBy = null;
   }
 
   public long getId() {
@@ -36,12 +36,12 @@ public class Book {
     return publishingHouse;
   }
 
-  public int getYear() {
+  public Integer getYear() {
     return year;
   }
 
-  public boolean isAvailable() {
-    return isAvailable;
+  public Reader getBorrowedBy() {
+    return borrowedBy;
   }
 
   public void setTitle(String title) {
@@ -56,12 +56,12 @@ public class Book {
     this.publishingHouse = publishingHouse;
   }
 
-  public void setYear(int year) {
+  public void setYear(Integer year) {
     this.year = year;
   }
 
-  public void setAvailable(boolean available) {
-    isAvailable = available;
+  public void setBorrowedBy(Reader borrowedBy) {
+    this.borrowedBy = borrowedBy;
   }
 
   @Override
@@ -70,7 +70,9 @@ public class Book {
             "id=" + id +
             ", title='" + title + '\'' +
             ", author='" + author + '\'' +
+            ", publishingHouse='" + publishingHouse + '\'' +
             ", year=" + year +
+            ", borrowed by=" + (borrowedBy == null ? "anybody (available)" : "Reader ID:" + borrowedBy.getId()) +
             '}';
   }
 }
