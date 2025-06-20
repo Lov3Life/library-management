@@ -22,6 +22,15 @@ public class Book {
     this.borrowedBy = null;
   }
 
+  public Book(long id, String title, String author, String publishingHouse, Integer year){
+    this.id = id;
+    this.title = title;
+    this.author = author;
+    this.publishingHouse = publishingHouse;
+    this.year = year;
+    this.borrowedBy = null;
+  }
+
   public long getId() {
     return id;
   }
@@ -44,6 +53,10 @@ public class Book {
 
   public Reader getBorrowedBy() {
     return borrowedBy;
+  }
+
+  public static void setLastId(long lastId) {
+    LAST_ID = lastId;
   }
 
   public void setTitle(String title) {

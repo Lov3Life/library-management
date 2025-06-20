@@ -1,5 +1,6 @@
 package app;
 
+import data.LibraryDataManager;
 import model.*;
 
 import java.time.DateTimeException;
@@ -11,12 +12,13 @@ public class LibraryApp {
   private final Library library;
   private final Scanner userInputScanner;
 
-  public LibraryApp(Library library) {
-    this.library = library;
+  public LibraryApp() {
+    this.library = new Library(LibraryDataManager.loadLibraryName());
     this.userInputScanner = new Scanner(System.in);
   }
 
   public void startApp() {
+    LibraryDataManager.loadReadersAndBooksData(library);
     System.out.printf("\n\n\nWelcome in Library ('%s') management System\n\n", library.getName());
     boolean globalFlag = true;
     String options = """
@@ -441,14 +443,14 @@ public class LibraryApp {
     switch(input) {
       case 1 -> {
         String name = getStringInput("Name: ");
-        System.out.println("Matching readers:");
+        System.out.println("\nMatching readers:\n");
         readerStream
                 .filter(reader -> reader.getFirstName().equalsIgnoreCase(name))
                 .forEach(System.out::println);
       }
       case 2 -> {
         String surname = getStringInput("Surname: ");
-        System.out.println("Matching readers:");
+        System.out.println("\nMatching readers:\n");
         readerStream
                 .filter(reader -> reader.getLastName().equalsIgnoreCase(surname))
                 .forEach(System.out::println);
@@ -456,7 +458,7 @@ public class LibraryApp {
       case 3 -> {
         String name = getStringInput("Name: ");
         String surname = getStringInput("Surname: ");
-        System.out.println("Matching readers:");
+        System.out.println("\nMatching readers:\n");
         readerStream
                 .filter(reader -> reader.getFirstName().equalsIgnoreCase(name))
                 .filter(reader -> reader.getLastName().equalsIgnoreCase(surname))
@@ -466,7 +468,7 @@ public class LibraryApp {
         String name = getStringInput("Name: ");
         String surname = getStringInput("Surname: ");
         LocalDate date = getDateInput(LocalDate.now());
-        System.out.println("Matching readers:");
+        System.out.println("\nMatching readers:\n");
         readerStream
                 .filter(reader -> reader.getFirstName().equalsIgnoreCase(name))
                 .filter(reader -> reader.getLastName().equalsIgnoreCase(surname))
@@ -474,23 +476,23 @@ public class LibraryApp {
                 .forEach(System.out::println);
       }
       case 5 -> {
-        System.out.println("Matching readers:");
+        System.out.println("\nMatching readers:\n");
         readerStream
               .filter(reader -> !reader.getBorrowedBooks().isEmpty())
               .forEach(System.out::println);
       }
       case 6 -> {
-        System.out.println("Matching readers:");
+        System.out.println("\nMatching readers:\n");
         readerStream
               .filter(reader -> reader.getBorrowedBooks().isEmpty())
               .forEach(System.out::println);
       }
       case 7 -> {
-        System.out.println("Matching readers:");
+        System.out.println("\nMatching readers:\n");
         readerStream
               .forEach(System.out::println);
       }
-      default -> System.out.println("Invalid input");
+      default -> System.out.println("\nInvalid input");
     }
   }
 
@@ -522,14 +524,14 @@ public class LibraryApp {
     switch(input) {
       case 1 -> {
         String title = getStringInput("Title: ");
-        System.out.println("Matching books:");
+        System.out.println("\nMatching books:\n");
         bookStream
                 .filter(book -> book.getTitle().equalsIgnoreCase(title))
                 .forEach(System.out::println);
       }
       case 2 -> {
         String author = getStringInput("Author: ");
-        System.out.println("Matching books:");
+        System.out.println("\nMatching books:\n");
         bookStream
                 .filter(book -> book.getAuthor().equalsIgnoreCase(author))
                 .forEach(System.out::println);
@@ -537,7 +539,7 @@ public class LibraryApp {
       case 3 -> {
         String title = getStringInput("Title: ");
         String author = getStringInput("Author: ");
-        System.out.println("Matching books:");
+        System.out.println("\nMatching books:\n");
         bookStream
                 .filter(book -> book.getTitle().equalsIgnoreCase(title))
                 .filter(book -> book.getAuthor().equalsIgnoreCase(author))
@@ -545,7 +547,7 @@ public class LibraryApp {
       }
       case 4 -> {
         String house = getStringInput("Publishing house: ");
-        System.out.println("Matching books:");
+        System.out.println("\nMatching books:\n");
         bookStream
                 .filter(book -> book.getPublishingHouse().equalsIgnoreCase(house))
                 .forEach(System.out::println);
@@ -554,7 +556,7 @@ public class LibraryApp {
         String title = getStringInput("Title: ");
         String author = getStringInput("Author: ");
         String house = getStringInput("Publishing house: ");
-        System.out.println("Matching books:");
+        System.out.println("\nMatching books:\n");
         bookStream
                 .filter(book -> book.getTitle().equalsIgnoreCase(title))
                 .filter(book -> book.getAuthor().equalsIgnoreCase(author))
@@ -563,7 +565,7 @@ public class LibraryApp {
       }
       case 6 -> {
         Integer year = getIntegerInput("Publishing year: ");
-        System.out.println("Matching books:");
+        System.out.println("\nMatching books:\n");
         if(year != null){
           bookStream
                   .filter(book -> book.getYear().equals(year))
@@ -575,23 +577,23 @@ public class LibraryApp {
         }
       }
       case 7 ->{
-        System.out.println("Matching books:");
+        System.out.println("\nMatching books:\n");
         bookStream
               .filter(book -> book.getBorrowedBy() != null)
               .forEach(System.out::println);
       }
       case 8 ->{
-        System.out.println("Matching books:");
+        System.out.println("\nMatching books:\n");
         bookStream
               .filter(book -> book.getBorrowedBy() == null)
               .forEach(System.out::println);
       }
       case 9 ->{
-        System.out.println("Matching books:");
+        System.out.println("\nMatching books:\n");
         bookStream
               .forEach(System.out::println);
       }
-      default -> System.out.println("Invalid input");
+      default -> System.out.println("\nInvalid input");
     }
   }
 
@@ -603,6 +605,31 @@ public class LibraryApp {
   }
 
   public void closeApp() {
-
+    String options = """
+            1. Yes
+            0. No
+            """;
+    System.out.println("\n" + options);
+    System.out.print("Save the entered data: ");
+    int validOutput = 0;
+    try {
+      validOutput = Integer.parseInt(userInputScanner.nextLine());
+    } catch(NumberFormatException e) {
+      System.out.println("\nInvalid input.");
+      closeApp();
+    }
+    switch(validOutput){
+      case 1 -> {
+        LibraryDataManager.saveLibraryName(library.getName());
+        LibraryDataManager.saveReaders(library.getReaders());
+        LibraryDataManager.saveBooks(library.getBooks());
+      }
+      case 0 -> {
+      }
+      default -> {
+        System.out.println("\nInvalid input.");
+        closeApp();
+      }
+    }
   }
 }

@@ -24,6 +24,14 @@ public class Reader {
     this.borrowedBooks = new ArrayList<>();
   }
 
+  public Reader(long id, String firstName, String lastName, LocalDate date) {
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.birthDate = date;
+    this.borrowedBooks = new ArrayList<>();
+  }
+
   public long getId() {
     return id;
   }
@@ -42,6 +50,10 @@ public class Reader {
 
   public List<Book> getBorrowedBooks() {
     return borrowedBooks;
+  }
+
+  public static void setLastId(long lastId) {
+    LAST_ID = lastId;
   }
 
   public void setFirstName(String firstName) {

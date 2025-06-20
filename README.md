@@ -1,5 +1,3 @@
-TODO:
+TODO (21.06.2025):
 
-- saving to file
-- better UI 
-- check methods in LibraryApp.java
+- Make README.MD
