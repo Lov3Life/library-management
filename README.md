@@ -76,7 +76,7 @@ CSV and TXT files in the `config/` folder store the data:
   ```
   My Library Name
   ```
-
+  
 ---
 
 ## 💬 Encoding and Compatibility
