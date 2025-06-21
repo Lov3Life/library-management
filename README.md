@@ -26,7 +26,8 @@ Library_management/
 │       ├── Library.java
 │       └── Reader.java
 ├── run.bat                ← batch file for compiling and launching the app
-└── README.md              ← this file
+├── README.md              ← this file
+└── LICENSE                ← license file
 ```
 
 ---
