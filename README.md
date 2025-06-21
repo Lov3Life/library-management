@@ -95,4 +95,4 @@ This project is licensed under the **MIT License** – see the [LICENSE](LICENSE
 
 ---
 
-© 2025 Bartosz T. [GitHub](https://github.com/Lov3Life)
+© 2025 Bartosz T. [Lov3Life](https://github.com/Lov3Life)
