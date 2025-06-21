@@ -1,10 +1,10 @@
-1;Jan;Kowalski;1998;12;15
-2;Marek;Kozak;2006;9;25
+1;Jan;Kowalski;1998;12;15;2,3,33
+2;Marek;Kozak;2006;9;25;4,5
 3;Bartek;Skiba;1985;2;2
-4;Mariusz;Podlaski;1944;4;9
+4;Mariusz;Podlaski;1944;4;9;6
 5;Beata;Samorska;2000;4;21
 8;Janusz;Kowal;2001;1;2
 9;Jan;Kowalski;2000;12;31
 10;Dominik;Paź;2010;4;7
-11;Żaneta;Żuchwa;1987;12;12
-12;Kazimierz;Tak;2000;4;30
+11;Żaneta;Żuchwa;1987;12;12;8,9
+12;Kazimierz;Tak;2000;4;30;7
