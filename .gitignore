@@ -29,6 +29,5 @@ bin/
 .DS_Store
 
 ### added ###
-
 .idea/
 *.iml
