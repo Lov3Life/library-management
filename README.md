@@ -60,6 +60,14 @@ Library_management/
 
 ---
 
+## 🖼️ Preview – Main Menu
+
+Here is what the main menu looks like in the console:
+
+![Main Menu Screenshot](img/menu-screenshot.png)
+
+---
+
 ## 📝 Data Format
 
 CSV and TXT files in the `config/` folder store the data:
