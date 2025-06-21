@@ -5,6 +5,7 @@ import model.Library;
 import model.Reader;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +21,7 @@ public class LibraryDataManager {
   public static void saveLibraryName(String name){
     File file = new File(LIBRARY_NAME_FILE);
     file.getParentFile().mkdir();
-    try(BufferedWriter writer = new BufferedWriter(new FileWriter(LIBRARY_NAME_FILE))){
+    try(BufferedWriter writer = new BufferedWriter(new FileWriter(LIBRARY_NAME_FILE, StandardCharsets.UTF_8))){
       writer.write(name);
     } catch(IOException e) {
       System.out.println("error while writing library name to file");
@@ -31,7 +32,7 @@ public class LibraryDataManager {
   public static void saveReaders(List<Reader> readers){
     File file = new File(READERS_FILE);
     file.getParentFile().mkdir();
-    try(BufferedWriter writer = new BufferedWriter(new FileWriter(READERS_FILE))) {
+    try(BufferedWriter writer = new BufferedWriter(new FileWriter(READERS_FILE, StandardCharsets.UTF_8))) {
       for(Reader reader : readers){
         StringBuilder stringWriter = new StringBuilder(reader.getId() + ";"
                 + reader.getFirstName() + ";"
@@ -56,7 +57,7 @@ public class LibraryDataManager {
   public static void saveBooks(List<Book> books){
     File file = new File(BOOKS_FILE);
     file.getParentFile().mkdir();
-    try(BufferedWriter writer = new BufferedWriter(new FileWriter(BOOKS_FILE))) {
+    try(BufferedWriter writer = new BufferedWriter(new FileWriter(BOOKS_FILE, StandardCharsets.UTF_8))) {
       for(Book book : books){
         String stringWriter = book.getId() + ";"
                 + book.getTitle() + ";"
@@ -73,7 +74,7 @@ public class LibraryDataManager {
   }
 
   public static String loadLibraryName(){
-    try(BufferedReader bufferedReader = new BufferedReader(new FileReader(LIBRARY_NAME_FILE))){
+    try(BufferedReader bufferedReader = new BufferedReader(new FileReader(LIBRARY_NAME_FILE, StandardCharsets.UTF_8))){
       return bufferedReader.readLine();
     }catch(IOException e) {
       return "Default library";
@@ -81,7 +82,7 @@ public class LibraryDataManager {
   }
 
   private static Map<Long, Book> loadMapBooks(Library library){
-    try(BufferedReader bufferedReader = new BufferedReader(new FileReader(BOOKS_FILE))) {
+    try(BufferedReader bufferedReader = new BufferedReader(new FileReader(BOOKS_FILE, StandardCharsets.UTF_8))) {
       String line;
       long maxID = 0;
       Map<Long, Book> books = new HashMap<>();
@@ -105,7 +106,7 @@ public class LibraryDataManager {
 
   private static void loadReaders(Library library){
     Map<Long, Book> books = loadMapBooks(library);
-    try(BufferedReader bufferedReader = new BufferedReader(new FileReader(READERS_FILE))) {
+    try(BufferedReader bufferedReader = new BufferedReader(new FileReader(READERS_FILE, StandardCharsets.UTF_8))) {
       String line;
       long maxID = 0;
       while((line = bufferedReader.readLine()) != null){

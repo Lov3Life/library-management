@@ -11,16 +11,17 @@ import java.util.stream.Stream;
 public class LibraryApp {
   private final Library library;
   private final Scanner userInputScanner;
+  private boolean globalFlag;
 
   public LibraryApp() {
     this.library = new Library(LibraryDataManager.loadLibraryName());
     this.userInputScanner = new Scanner(System.in);
+    this.globalFlag = true;
   }
 
   public void startApp() {
     LibraryDataManager.loadReadersAndBooksData(library);
     System.out.printf("\n\n\nWelcome in Library ('%s') management System\n\n", library.getName());
-    boolean globalFlag = true;
     String options = """
             1. Register new Reader
             2. Change existing Reader data (need Reader ID)
@@ -49,10 +50,7 @@ public class LibraryApp {
         continue;
       }
       switch(validOutput) {
-        case 0 -> {
-          closeApp();
-          globalFlag = false;
-        }
+        case 0 -> closeApp();
         case 1 -> addReaderToLibrary();
         case 2 -> changeReaderData();
         case 3 -> removeReaderFromLibrary();
@@ -74,8 +72,8 @@ public class LibraryApp {
     System.out.println("\nRegister new reader\n");
     LocalDate now = LocalDate.now();
     String firstName, lastName;
-    firstName = getStringInput("Name: ");
-    lastName = getStringInput("Surname: ");
+    firstName = getStringInput("Name: ", false);
+    lastName = getStringInput("Surname: ", false);
     LocalDate bthDate = getDateInput(now);
     Reader userPretender = new Reader(firstName, lastName, bthDate);
     changeReaderData(userPretender);
@@ -91,8 +89,12 @@ public class LibraryApp {
             .findFirst()
             .orElse(null);
     if(userToRemove != null) {
-      library.getReaders().remove(userToRemove);
-      System.out.println("\nReader successfully removed");
+      if(userToRemove.getBorrowedBooks().isEmpty()){
+        library.getReaders().remove(userToRemove);
+        System.out.println("\nReader successfully removed");
+      } else {
+        System.out.println("\nReader has borrowed books. Can not remove");
+      }
     } else {
       System.out.println("\nNo reader with this ID found");
     }
@@ -121,12 +123,12 @@ public class LibraryApp {
       }
       switch(output) {
         case 1 -> {
-          String name = getStringInput("Name: ");
+          String name = getStringInput("Name: ", false);
           reader.setFirstName(name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase());
           System.out.println("\nReader name changes");
         }
         case 2 -> {
-          String surname = getStringInput("Surname: ");
+          String surname = getStringInput("Surname: ", false);
           reader.setLastName(surname.substring(0, 1).toUpperCase() + surname.substring(1).toLowerCase());
           System.out.println("\nReader surname changes");
         }
@@ -140,9 +142,20 @@ public class LibraryApp {
     }
   }
 
-  private String getStringInput(String message) {
-    System.out.print(message);
-    return userInputScanner.nextLine();
+  private String getStringInput(String message, boolean canBeEmpty) {
+    while(true){
+      System.out.print(message);
+      String input = userInputScanner.nextLine();
+      if(canBeEmpty){
+        return input;
+      }else {
+        if(input.isEmpty()){
+          System.out.println("This value can not be empty");
+        }else {
+          return input;
+        }
+      }
+    }
   }
 
   @SuppressWarnings("SameParameterValue")
@@ -261,9 +274,9 @@ public class LibraryApp {
     System.out.println("\nAdd new book to library\n");
     String title, author, publishingHouse;
     Integer year;
-    title = getStringInput("Title: ");
-    author = getStringInput("Author: ");
-    publishingHouse = getStringInput("Publishing house: ");
+    title = getStringInput("Title: ",false);
+    author = getStringInput("Author: ", true);
+    publishingHouse = getStringInput("Publishing house: ",true);
     year = getIntegerInput("Publishing year: ");
     Book book = new Book(title, author, publishingHouse, year);
     changeBookData(book);
@@ -295,15 +308,15 @@ public class LibraryApp {
       }
       switch(output) {
         case 1 -> {
-          book.setTitle(getStringInput("Title: "));
+          book.setTitle(getStringInput("Title: ",false));
           System.out.println("Title change");
         }
         case 2 -> {
-          book.setAuthor(getStringInput("Author: "));
+          book.setAuthor(getStringInput("Author: ",true));
           System.out.println("Author change");
         }
         case 3 -> {
-          book.setPublishingHouse(getStringInput("Publishing house: "));
+          book.setPublishingHouse(getStringInput("Publishing house: ", true));
           System.out.println("Publishing house change");
         }
         case 4 -> {
@@ -339,8 +352,12 @@ public class LibraryApp {
             .findFirst()
             .orElse(null);
     if(bookToRemove != null) {
-      library.getBooks().remove(bookToRemove);
-      System.out.println("\nBook successfully removed");
+      if(bookToRemove.getBorrowedBy() == null){
+        library.getBooks().remove(bookToRemove);
+        System.out.println("\nBook successfully removed");
+      }else {
+        System.out.println("\nThe book is borrowed. Cannot be removed");
+      }
     } else {
       System.out.println("No Book with this ID found");
     }
@@ -429,6 +446,7 @@ public class LibraryApp {
             6. No borrowed books
             7. all readers
             """;
+    System.out.println("Filter options:");
     System.out.println(filterOptions);
     int input;
     while(true) {
@@ -442,22 +460,22 @@ public class LibraryApp {
     }
     switch(input) {
       case 1 -> {
-        String name = getStringInput("Name: ");
+        String name = getStringInput("Name: ", false);
         System.out.println("\nMatching readers:\n");
         readerStream
                 .filter(reader -> reader.getFirstName().equalsIgnoreCase(name))
                 .forEach(System.out::println);
       }
       case 2 -> {
-        String surname = getStringInput("Surname: ");
+        String surname = getStringInput("Surname: ", false);
         System.out.println("\nMatching readers:\n");
         readerStream
                 .filter(reader -> reader.getLastName().equalsIgnoreCase(surname))
                 .forEach(System.out::println);
       }
       case 3 -> {
-        String name = getStringInput("Name: ");
-        String surname = getStringInput("Surname: ");
+        String name = getStringInput("Name: ", false);
+        String surname = getStringInput("Surname: ", false);
         System.out.println("\nMatching readers:\n");
         readerStream
                 .filter(reader -> reader.getFirstName().equalsIgnoreCase(name))
@@ -465,8 +483,8 @@ public class LibraryApp {
                 .forEach(System.out::println);
       }
       case 4 -> {
-        String name = getStringInput("Name: ");
-        String surname = getStringInput("Surname: ");
+        String name = getStringInput("Name: ", false);
+        String surname = getStringInput("Surname: ", false);
         LocalDate date = getDateInput(LocalDate.now());
         System.out.println("\nMatching readers:\n");
         readerStream
@@ -510,6 +528,7 @@ public class LibraryApp {
             8. No borrowed books
             9. all books
             """;
+    System.out.println("Filter options:");
     System.out.println(filterOptions);
     int input;
     while(true) {
@@ -523,22 +542,22 @@ public class LibraryApp {
     }
     switch(input) {
       case 1 -> {
-        String title = getStringInput("Title: ");
+        String title = getStringInput("Title: ", false);
         System.out.println("\nMatching books:\n");
         bookStream
                 .filter(book -> book.getTitle().equalsIgnoreCase(title))
                 .forEach(System.out::println);
       }
       case 2 -> {
-        String author = getStringInput("Author: ");
+        String author = getStringInput("Author: ", true);
         System.out.println("\nMatching books:\n");
         bookStream
                 .filter(book -> book.getAuthor().equalsIgnoreCase(author))
                 .forEach(System.out::println);
       }
       case 3 -> {
-        String title = getStringInput("Title: ");
-        String author = getStringInput("Author: ");
+        String title = getStringInput("Title: ", false);
+        String author = getStringInput("Author: ", true);
         System.out.println("\nMatching books:\n");
         bookStream
                 .filter(book -> book.getTitle().equalsIgnoreCase(title))
@@ -546,16 +565,16 @@ public class LibraryApp {
                 .forEach(System.out::println);
       }
       case 4 -> {
-        String house = getStringInput("Publishing house: ");
+        String house = getStringInput("Publishing house: ", true);
         System.out.println("\nMatching books:\n");
         bookStream
                 .filter(book -> book.getPublishingHouse().equalsIgnoreCase(house))
                 .forEach(System.out::println);
       }
       case 5 -> {
-        String title = getStringInput("Title: ");
-        String author = getStringInput("Author: ");
-        String house = getStringInput("Publishing house: ");
+        String title = getStringInput("Title: ", false);
+        String author = getStringInput("Author: ", true);
+        String house = getStringInput("Publishing house: ", true);
         System.out.println("\nMatching books:\n");
         bookStream
                 .filter(book -> book.getTitle().equalsIgnoreCase(title))
@@ -599,7 +618,7 @@ public class LibraryApp {
 
   public void changeLibraryName() {
     System.out.println("\nChange Library name (current name: '" + library.getName() + "')\n");
-    String newName = getStringInput("New library name: ");
+    String newName = getStringInput("New library name: ", false);
     library.setName(newName);
     System.out.println("\nLibrary name changed");
   }
@@ -611,25 +630,24 @@ public class LibraryApp {
             """;
     System.out.println("\n" + options);
     System.out.print("Save the entered data: ");
-    int validOutput = 0;
-    try {
-      validOutput = Integer.parseInt(userInputScanner.nextLine());
-    } catch(NumberFormatException e) {
-      System.out.println("\nInvalid input.");
-      closeApp();
+    int validOutput;
+    while(true){
+      try {
+        validOutput = Integer.parseInt(userInputScanner.nextLine());
+        break;
+      } catch(NumberFormatException e) {
+        System.out.print("\nInvalid input. Save the entered data: ");
+      }
     }
     switch(validOutput){
       case 1 -> {
         LibraryDataManager.saveLibraryName(library.getName());
         LibraryDataManager.saveReaders(library.getReaders());
         LibraryDataManager.saveBooks(library.getBooks());
+        globalFlag = false;
       }
-      case 0 -> {
-      }
-      default -> {
-        System.out.println("\nInvalid input.");
-        closeApp();
-      }
+      case 0 -> globalFlag = false;
+      default -> System.out.println("\nInvalid input.");
     }
   }
 }

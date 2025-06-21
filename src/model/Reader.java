@@ -80,12 +80,10 @@ public class Reader {
         prefix = ",";
       }
     }
-    return "Reader{" +
-            "id=" + id +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", birthDate=" + birthDate +
-            ", borrowedBooks (ID's)=" + borrowedBooksString +
-            '}';
+    return  "id: " + id +
+            ", firstName: '" + firstName + '\'' +
+            ", lastName: '" + lastName + '\'' +
+            ", birthDate: " + birthDate +
+            ", borrowedBooks (ID's): " + borrowedBooksString;
   }
 }

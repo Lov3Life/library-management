@@ -81,13 +81,11 @@ public class Book {
 
   @Override
   public String toString() {
-    return "Book{" +
-            "id=" + id +
-            ", title='" + title + '\'' +
-            ", author='" + author + '\'' +
-            ", publishingHouse='" + publishingHouse + '\'' +
-            ", year=" + year +
-            ", borrowed by=" + (borrowedBy == null ? "anybody (available)" : "Reader ID:" + borrowedBy.getId()) +
-            '}';
+    return  "id: " + id +
+            ", title: '" + title + '\'' +
+            ", author: '" + author + '\'' +
+            ", publishingHouse: '" + (publishingHouse.isEmpty() ? "not entered" : publishingHouse) + '\'' +
+            ", year: " + (year == null ? "not entered" : year) +
+            ", borrowed by (Reader ID): " + (borrowedBy == null ? "anybody (available)" : borrowedBy.getId());
   }
 }
