@@ -75,11 +75,7 @@ public class LibraryApp {
 
   public void removeReaderFromLibrary() {
     System.out.println("\nRemove existing reader\n");
-    long userID = getLongInput("Enter reader ID to remove: ", "Invalid ID. Try again: ");
-    var userToRemove = library.getReaders().stream()
-            .filter(reader -> reader.getId() == userID)
-            .findFirst()
-            .orElse(null);
+    Reader userToRemove = getReaderByID("Enter reader ID to remove: ", "Invalid ID. Try again: ");
     if(userToRemove != null) {
       if(userToRemove.getBorrowedBooks().isEmpty()){
         library.getReaders().remove(userToRemove);
@@ -242,11 +238,7 @@ public class LibraryApp {
 
   public void changeReaderData() {
     System.out.println("\nChange reader data\n");
-    long userID = getLongInput("Enter reader ID to change reader data: ", "Invalid ID, try again: ");
-    var userToChange = library.getReaders().stream()
-            .filter(reader -> reader.getId() == userID)
-            .findFirst()
-            .orElse(null);
+    Reader userToChange = getReaderByID("Enter reader ID to change reader data: ", "Invalid ID, try again: ");
     if(userToChange != null) {
       changeReaderData(userToChange);
     } else {
@@ -256,7 +248,7 @@ public class LibraryApp {
 
   public void readerBorrowedBooks() {
     System.out.println("\nPrint reader borrowed books\n");
-    Reader readerToCheck = getReaderByID();
+    Reader readerToCheck = getReaderByID("Reader ID: ", "Invalid reader ID, try again: ");
     if(readerToCheck == null) {
       System.out.println("\nInvalid Reader ID");
     } else {
@@ -323,11 +315,7 @@ public class LibraryApp {
 
   public void changeBookData() {
     System.out.println("\nChange book data\n");
-    long bookID = getLongInput("Enter Book ID to change data: ", "Invalid ID, try again: ");
-    var bookToChange = library.getBooks().stream()
-            .filter(book -> book.getId() == bookID)
-            .findFirst()
-            .orElse(null);
+    Book bookToChange = getBookById("Enter Book ID to change data: ", "Invalid ID, try again: ");
     if(bookToChange != null) {
       changeBookData(bookToChange);
     } else {
@@ -338,11 +326,7 @@ public class LibraryApp {
   public void removeBookFromLibrary() {
     System.out.println("\nRemove existing book from library\n");
     System.out.print("Enter book ID to remove: ");
-    long bookID = getLongInput("Enter book ID to remove: ", "Invalid ID, try again: ");
-    var bookToRemove = library.getBooks().stream()
-            .filter(book -> book.getId() == bookID)
-            .findFirst()
-            .orElse(null);
+    Book bookToRemove = getBookById("Enter book ID to remove: ", "Invalid ID, try again: ");
     if(bookToRemove != null) {
       if(bookToRemove.getBorrowedBy() == null){
         library.getBooks().remove(bookToRemove);
@@ -357,8 +341,8 @@ public class LibraryApp {
 
   public void borrowBook() {
     System.out.println("\nBorrow book by reader\n");
-    Reader userToBorrow = getReaderByID();
-    Book bookToBorrow = getBookById();
+    Reader userToBorrow = getReaderByID("Reader ID: ", "Invalid reader ID, try again: ");
+    Book bookToBorrow = getBookById("Book ID: ", "Invalid book, try again: ");
     if(userToBorrow == null) {
       System.out.println("Invalid reader ID");
       return;
@@ -384,8 +368,8 @@ public class LibraryApp {
 
   public void returnBook() {
     System.out.println("\nReturn book by reader\n");
-    Reader userToReturn = getReaderByID();
-    Book bookToReturn = getBookById();
+    Reader userToReturn = getReaderByID("Reader ID: ", "Invalid reader ID, try again: ");
+    Book bookToReturn = getBookById("Book ID: ", "Invalid book, try again: ");
     if(userToReturn == null) {
       System.out.println("Invalid reader ID");
       return;
@@ -410,16 +394,16 @@ public class LibraryApp {
     System.out.println("\nBook Returned successfully");
   }
 
-  private Reader getReaderByID() {
-    long readerID = getLongInput("Reader ID: ", "Invalid reader ID, try again: ");
+  private Reader getReaderByID(String messageFirst, String messageInvalid) {
+    long readerID = getLongInput(messageFirst, messageInvalid);
     return library.getReaders().stream()
             .filter(reader -> reader.getId() == readerID)
             .findFirst()
             .orElse(null);
   }
 
-  private Book getBookById() {
-    long bookID = getLongInput("Book ID: ", "Invalid book, try again: ");
+  private Book getBookById(String messageFirst, String messageInvalid) {
+    long bookID = getLongInput(messageFirst, messageInvalid);
     return library.getBooks().stream()
             .filter(book -> book.getId() == bookID)
             .findFirst()
