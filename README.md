@@ -1,10 +1,10 @@
-# 📚 Library Management System (Java, Console App)
+# Library Management System (Java, Console App)
 
 A console application for managing a library, written in plain Java. It allows registering and editing readers, adding/removing books, borrowing and returning books, and printing records.
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Library_management/
@@ -26,19 +26,19 @@ Library_management/
 │       ├── Library.java
 │       └── Reader.java
 ├── run.bat                ← batch file for compiling and launching the app
-├── README.md              ← this file
+├── README.md              ← README file
 └── LICENSE                ← license file
 ```
 
 ---
 
-## ▶️ How to Run the Project
+## How to Run the Project
 
-### ✅ Requirements:
+### Requirements:
 - Java 17 or later installed
 - Operating system: Windows (classic Command Prompt preferred for UTF-8 compatibility)
 
-### 🔧 Instructions:
+### Instructions:
 1. **Double-click** the `run.bat` file  
    *(or run it manually from the Windows Command Prompt)*
 2. The script will:
@@ -49,18 +49,18 @@ Library_management/
 
 ---
 
-## 🧪 App Features
+## App Features
 
-- ✅ Register and edit reader information
-- ✅ Add, edit, or delete books
-- ✅ Borrow and return books
-- ✅ Print reader or book lists
-- ✅ Change the library name (saved to file)
-- ✅ Data is persisted in CSV format
+- Register and edit reader information
+- Add, edit, or delete books
+- Borrow and return books
+- Print reader or book lists
+- Change the library name (saved to file)
+- Data is persisted in CSV format
 
 ---
 
-## 🖼️ Preview – Main Menu
+## Preview – Main Menu
 
 Here is what the main menu looks like in the console:
 
@@ -68,7 +68,7 @@ Here is what the main menu looks like in the console:
 
 ---
 
-## 📝 Data Format
+## Data Format
 
 CSV and TXT files in the `config/` folder store the data:
 
@@ -87,7 +87,7 @@ CSV and TXT files in the `config/` folder store the data:
 
 ---
 
-## 💬 Encoding and Compatibility
+## Encoding and Compatibility
 
 - All source files and CSV data are saved in UTF-8
 - For correct display of Polish characters, the following are required:
@@ -97,7 +97,7 @@ CSV and TXT files in the `config/` folder store the data:
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
 
