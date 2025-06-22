@@ -22,7 +22,7 @@ public class Book {
     this.borrowedBy = null;
   }
 
-  public Book(long id, String title, String author, String publishingHouse, Integer year){
+  public Book(long id, String title, String author, String publishingHouse, Integer year) {
     this.id = id;
     this.title = title;
     this.author = author;
@@ -81,7 +81,7 @@ public class Book {
 
   @Override
   public String toString() {
-    return  "id: " + id +
+    return "id: " + id +
             ", title: '" + title + '\'' +
             ", author: '" + author + '\'' +
             ", publishingHouse: '" + (publishingHouse.isEmpty() ? "not entered" : publishingHouse) + '\'' +

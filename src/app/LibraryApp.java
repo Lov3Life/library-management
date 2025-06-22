@@ -1,7 +1,9 @@
 package app;
 
 import data.LibraryDataManager;
-import model.*;
+import model.Book;
+import model.Library;
+import model.Reader;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -60,90 +62,29 @@ public class LibraryApp {
     }
   }
 
-  public void addReaderToLibrary() {
-    System.out.println("\nRegister new reader\n");
-    LocalDate now = LocalDate.now();
-    String firstName, lastName;
-    firstName = getStringInput("Name: ", false);
-    lastName = getStringInput("Surname: ", false);
-    LocalDate bthDate = getDateInput(now);
-    Reader userPretender = new Reader(firstName, lastName, bthDate);
-    changeReaderData(userPretender);
-    library.registerUser(userPretender);
-    System.out.println("\nReader successfully added");
-  }
-
-  public void removeReaderFromLibrary() {
-    System.out.println("\nRemove existing reader\n");
-    Reader userToRemove = getReaderByID("Enter reader ID to remove: ", "Invalid ID. Try again: ");
-    if(userToRemove != null) {
-      if(userToRemove.getBorrowedBooks().isEmpty()){
-        library.getReaders().remove(userToRemove);
-        System.out.println("\nReader successfully removed");
-      } else {
-        System.out.println("\nReader has borrowed books. Can not remove");
-      }
-    } else {
-      System.out.println("\nNo reader with this ID found");
-    }
-  }
-
-  private void changeReaderData(Reader reader) {
-    boolean wantChangeFlag = true;
-    while(wantChangeFlag) {
-      System.out.printf("\nSummary:\n %s\n\n", reader.toString());
-      String changes = """
-              1. Name
-              2. Surname
-              3. Birth date
-              0. save as is (Summary)
-              """;
-      System.out.println(changes);
-      int output = getIntInputMenuOptions("Make any changes: ", "\nIncorrect option. Make any changes: ", 0, 3);
-      switch(output) {
-        case 1 -> {
-          String name = getStringInput("Name: ", false);
-          reader.setFirstName(name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase());
-          System.out.println("\nReader name changes");
-        }
-        case 2 -> {
-          String surname = getStringInput("Surname: ", false);
-          reader.setLastName(surname.substring(0, 1).toUpperCase() + surname.substring(1).toLowerCase());
-          System.out.println("\nReader surname changes");
-        }
-        case 3 -> {
-          reader.setBirthDate(getDateInput(LocalDate.now()));
-          System.out.println("\nReader birth date changes");
-        }
-        case 0 -> wantChangeFlag = false;
-        default -> System.out.println("\nIncorrect option selected");
-      }
-    }
-  }
-
   private String getStringInput(String message, boolean canBeEmpty) {
-    while(true){
+    while(true) {
       System.out.print(message);
       String input = userInputScanner.nextLine();
-      if(canBeEmpty){
+      if(canBeEmpty) {
         return input;
-      }else {
-        if(input.isEmpty()){
+      } else {
+        if(input.isEmpty()) {
           System.out.println("This value can not be empty");
-        }else {
+        } else {
           return input;
         }
       }
     }
   }
 
-  private int getIntInputMenuOptions(String messageFirst, String messageInvalid, int minVal, int maxVal){
+  private int getIntInputMenuOptions(String messageFirst, String messageInvalid, int minVal, int maxVal) {
     System.out.print(messageFirst);
     int value;
     while(true) {
       try {
         value = Integer.parseInt(userInputScanner.nextLine());
-        if(value >= minVal && value <= maxVal){
+        if(value >= minVal && value <= maxVal) {
           break;
         } else {
           throw new NumberFormatException("Number out of range");
@@ -236,6 +177,36 @@ public class LibraryApp {
     return bthDate;
   }
 
+  private Reader getReaderByID(String messageFirst, String messageInvalid) {
+    long readerID = getLongInput(messageFirst, messageInvalid);
+    return library.getReaders().stream()
+            .filter(reader -> reader.getId() == readerID)
+            .findFirst()
+            .orElse(null);
+  }
+
+  private Book getBookById(String messageFirst, String messageInvalid) {
+    long bookID = getLongInput(messageFirst, messageInvalid);
+    return library.getBooks().stream()
+            .filter(book -> book.getId() == bookID)
+            .findFirst()
+            .orElse(null);
+  }
+
+  public void addReaderToLibrary() {
+    System.out.println("\nRegister new reader\n");
+    LocalDate now = LocalDate.now();
+    String firstName, lastName;
+    firstName = getStringInput("Name: ", false);
+    lastName = getStringInput("Surname: ", false);
+    LocalDate bthDate = getDateInput(now);
+    Reader userPretender = new Reader(firstName, lastName, bthDate);
+    changeReaderData(userPretender);
+    library.registerUser(userPretender);
+    System.out.println("\nReader successfully added");
+  }
+
+
   public void changeReaderData() {
     System.out.println("\nChange reader data\n");
     Reader userToChange = getReaderByID("Enter reader ID to change reader data: ", "Invalid ID, try again: ");
@@ -243,6 +214,54 @@ public class LibraryApp {
       changeReaderData(userToChange);
     } else {
       System.out.println("Reader not exists in the database");
+    }
+  }
+
+  private void changeReaderData(Reader reader) {
+    boolean wantChangeFlag = true;
+    while(wantChangeFlag) {
+      System.out.printf("\nSummary:\n %s\n\n", reader.toString());
+      String changes = """
+              1. Name
+              2. Surname
+              3. Birth date
+              0. save as is (Summary)
+              """;
+      System.out.println(changes);
+      int output = getIntInputMenuOptions("Make any changes: ", "\nIncorrect option. Make any changes: ", 0, 3);
+      switch(output) {
+        case 1 -> {
+          String name = getStringInput("Name: ", false);
+          reader.setFirstName(name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase());
+          System.out.println("\nReader name changes");
+        }
+        case 2 -> {
+          String surname = getStringInput("Surname: ", false);
+          reader.setLastName(surname.substring(0, 1).toUpperCase() + surname.substring(1).toLowerCase());
+          System.out.println("\nReader surname changes");
+        }
+        case 3 -> {
+          reader.setBirthDate(getDateInput(LocalDate.now()));
+          System.out.println("\nReader birth date changes");
+        }
+        case 0 -> wantChangeFlag = false;
+        default -> System.out.println("\nIncorrect option selected");
+      }
+    }
+  }
+
+  public void removeReaderFromLibrary() {
+    System.out.println("\nRemove existing reader\n");
+    Reader userToRemove = getReaderByID("Enter reader ID to remove: ", "Invalid ID. Try again: ");
+    if(userToRemove != null) {
+      if(userToRemove.getBorrowedBooks().isEmpty()) {
+        library.getReaders().remove(userToRemove);
+        System.out.println("\nReader successfully removed");
+      } else {
+        System.out.println("\nReader has borrowed books. Can not remove");
+      }
+    } else {
+      System.out.println("\nNo reader with this ID found");
     }
   }
 
@@ -267,14 +286,24 @@ public class LibraryApp {
     System.out.println("\nAdd new book to library\n");
     String title, author, publishingHouse;
     Integer year;
-    title = getStringInput("Title: ",false);
+    title = getStringInput("Title: ", false);
     author = getStringInput("Author: ", true);
-    publishingHouse = getStringInput("Publishing house: ",true);
+    publishingHouse = getStringInput("Publishing house: ", true);
     year = getIntegerInput("Publishing year: ");
     Book book = new Book(title, author, publishingHouse, year);
     changeBookData(book);
     library.addBock(book);
     System.out.println("\nBook successfully added");
+  }
+
+  public void changeBookData() {
+    System.out.println("\nChange book data\n");
+    Book bookToChange = getBookById("Enter Book ID to change data: ", "Invalid ID, try again: ");
+    if(bookToChange != null) {
+      changeBookData(bookToChange);
+    } else {
+      System.out.println("Book not exists in the database");
+    }
   }
 
   private void changeBookData(Book book) {
@@ -292,11 +321,11 @@ public class LibraryApp {
       int output = getIntInputMenuOptions("Make any changes: ", "\nIncorrect option. Make any changes: ", 0, 4);
       switch(output) {
         case 1 -> {
-          book.setTitle(getStringInput("Title: ",false));
+          book.setTitle(getStringInput("Title: ", false));
           System.out.println("Title change");
         }
         case 2 -> {
-          book.setAuthor(getStringInput("Author: ",true));
+          book.setAuthor(getStringInput("Author: ", true));
           System.out.println("Author change");
         }
         case 3 -> {
@@ -313,25 +342,15 @@ public class LibraryApp {
     }
   }
 
-  public void changeBookData() {
-    System.out.println("\nChange book data\n");
-    Book bookToChange = getBookById("Enter Book ID to change data: ", "Invalid ID, try again: ");
-    if(bookToChange != null) {
-      changeBookData(bookToChange);
-    } else {
-      System.out.println("Book not exists in the database");
-    }
-  }
-
   public void removeBookFromLibrary() {
     System.out.println("\nRemove existing book from library\n");
     System.out.print("Enter book ID to remove: ");
     Book bookToRemove = getBookById("Enter book ID to remove: ", "Invalid ID, try again: ");
     if(bookToRemove != null) {
-      if(bookToRemove.getBorrowedBy() == null){
+      if(bookToRemove.getBorrowedBy() == null) {
         library.getBooks().remove(bookToRemove);
         System.out.println("\nBook successfully removed");
-      }else {
+      } else {
         System.out.println("\nThe book is borrowed. Cannot be removed");
       }
     } else {
@@ -394,22 +413,6 @@ public class LibraryApp {
     System.out.println("\nBook Returned successfully");
   }
 
-  private Reader getReaderByID(String messageFirst, String messageInvalid) {
-    long readerID = getLongInput(messageFirst, messageInvalid);
-    return library.getReaders().stream()
-            .filter(reader -> reader.getId() == readerID)
-            .findFirst()
-            .orElse(null);
-  }
-
-  private Book getBookById(String messageFirst, String messageInvalid) {
-    long bookID = getLongInput(messageFirst, messageInvalid);
-    return library.getBooks().stream()
-            .filter(book -> book.getId() == bookID)
-            .findFirst()
-            .orElse(null);
-  }
-
   public void printReaders() {
     System.out.println("\nPrint readers info\n");
     Stream<Reader> readerStream = null;
@@ -459,13 +462,13 @@ public class LibraryApp {
                 .filter(reader -> reader.getBirthDate().isEqual(date));
       }
       case 6 -> readerStream = library.getReaders().stream()
-            .filter(reader -> !reader.getBorrowedBooks().isEmpty());
+              .filter(reader -> !reader.getBorrowedBooks().isEmpty());
       case 7 -> readerStream = library.getReaders().stream()
-            .filter(reader -> reader.getBorrowedBooks().isEmpty());
+              .filter(reader -> reader.getBorrowedBooks().isEmpty());
       case 8 -> readerStream = library.getReaders().stream();
       default -> System.out.println("\nInvalid input");
     }
-    if(readerStream != null){
+    if(readerStream != null) {
       System.out.println("\nMatching readers:\n");
       readerStream
               .forEach(System.out::println);
@@ -529,22 +532,22 @@ public class LibraryApp {
       }
       case 7 -> {
         Integer year = getIntegerInput("Publishing year: ");
-        if(year != null){
+        if(year != null) {
           bookStream = library.getBooks().stream()
                   .filter(book -> book.getYear().equals(year));
-        }else{
+        } else {
           bookStream = library.getBooks().stream()
-                 .filter(book -> book.getYear() == null);
+                  .filter(book -> book.getYear() == null);
         }
       }
       case 8 -> bookStream = library.getBooks().stream()
-            .filter(book -> book.getBorrowedBy() != null);
+              .filter(book -> book.getBorrowedBy() != null);
       case 9 -> bookStream = library.getBooks().stream()
-            .filter(book -> book.getBorrowedBy() == null);
+              .filter(book -> book.getBorrowedBy() == null);
       case 10 -> bookStream = library.getBooks().stream();
       default -> System.out.println("\nInvalid input");
     }
-    if(bookStream != null){
+    if(bookStream != null) {
       System.out.println("\nMatching books:\n");
       bookStream
               .forEach(System.out::println);
@@ -565,7 +568,7 @@ public class LibraryApp {
             """;
     System.out.println("\n" + options);
     int validOutput = getIntInputMenuOptions("Save the entered data: ", "\nInvalid input. Save the entered data: ", 0, 1);
-    switch(validOutput){
+    switch(validOutput) {
       case 1 -> {
         LibraryDataManager.saveLibraryName(library.getName());
         LibraryDataManager.saveReaders(library.getReaders());

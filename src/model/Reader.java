@@ -71,16 +71,16 @@ public class Reader {
   @Override
   public String toString() {
     StringBuilder borrowedBooksString = new StringBuilder();
-    if(borrowedBooks.isEmpty()){
+    if(borrowedBooks.isEmpty()) {
       borrowedBooksString.append("any books borrowed");
-    }else {
+    } else {
       String prefix = "";
-      for(Book book : borrowedBooks){
+      for(Book book : borrowedBooks) {
         borrowedBooksString.append(prefix).append(book.getId());
         prefix = ",";
       }
     }
-    return  "id: " + id +
+    return "id: " + id +
             ", firstName: '" + firstName + '\'' +
             ", lastName: '" + lastName + '\'' +
             ", birthDate: " + birthDate +

@@ -18,10 +18,10 @@ public class LibraryDataManager {
   private static final String BOOKS_FILE = "config/books.csv";
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
-  public static void saveLibraryName(String name){
+  public static void saveLibraryName(String name) {
     File file = new File(LIBRARY_NAME_FILE);
     file.getParentFile().mkdir();
-    try(BufferedWriter writer = new BufferedWriter(new FileWriter(LIBRARY_NAME_FILE, StandardCharsets.UTF_8))){
+    try(BufferedWriter writer = new BufferedWriter(new FileWriter(LIBRARY_NAME_FILE, StandardCharsets.UTF_8))) {
       writer.write(name);
     } catch(IOException e) {
       System.out.println("error while writing library name to file");
@@ -29,11 +29,11 @@ public class LibraryDataManager {
   }
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
-  public static void saveReaders(List<Reader> readers){
+  public static void saveReaders(List<Reader> readers) {
     File file = new File(READERS_FILE);
     file.getParentFile().mkdir();
     try(BufferedWriter writer = new BufferedWriter(new FileWriter(READERS_FILE, StandardCharsets.UTF_8))) {
-      for(Reader reader : readers){
+      for(Reader reader : readers) {
         StringBuilder stringWriter = new StringBuilder(reader.getId() + ";"
                 + reader.getFirstName() + ";"
                 + reader.getLastName() + ";"
@@ -41,7 +41,7 @@ public class LibraryDataManager {
                 + reader.getBirthDate().getMonthValue() + ";"
                 + reader.getBirthDate().getDayOfMonth());
         String prefix = ";";
-        for(Book book : reader.getBorrowedBooks()){
+        for(Book book : reader.getBorrowedBooks()) {
           stringWriter.append(prefix).append(book.getId());
           prefix = ",";
         }
@@ -54,11 +54,11 @@ public class LibraryDataManager {
   }
 
   @SuppressWarnings("ResultOfMethodCallIgnored")
-  public static void saveBooks(List<Book> books){
+  public static void saveBooks(List<Book> books) {
     File file = new File(BOOKS_FILE);
     file.getParentFile().mkdir();
     try(BufferedWriter writer = new BufferedWriter(new FileWriter(BOOKS_FILE, StandardCharsets.UTF_8))) {
-      for(Book book : books){
+      for(Book book : books) {
         String stringWriter = book.getId() + ";"
                 + book.getTitle() + ";"
                 + book.getAuthor() + ";"
@@ -73,20 +73,20 @@ public class LibraryDataManager {
     }
   }
 
-  public static String loadLibraryName(){
-    try(BufferedReader bufferedReader = new BufferedReader(new FileReader(LIBRARY_NAME_FILE, StandardCharsets.UTF_8))){
+  public static String loadLibraryName() {
+    try(BufferedReader bufferedReader = new BufferedReader(new FileReader(LIBRARY_NAME_FILE, StandardCharsets.UTF_8))) {
       return bufferedReader.readLine();
-    }catch(IOException e) {
+    } catch(IOException e) {
       return "Default library";
     }
   }
 
-  private static Map<Long, Book> loadMapBooks(Library library){
+  private static Map<Long, Book> loadMapBooks(Library library) {
     try(BufferedReader bufferedReader = new BufferedReader(new FileReader(BOOKS_FILE, StandardCharsets.UTF_8))) {
       String line;
       long maxID = 0;
       Map<Long, Book> books = new HashMap<>();
-      while((line = bufferedReader.readLine()) != null){
+      while((line = bufferedReader.readLine()) != null) {
         String[] bookData = line.split(";");
         books.put(Long.parseLong(bookData[0]), new Book(Long.parseLong(bookData[0]),
                 bookData[1],
@@ -104,12 +104,12 @@ public class LibraryDataManager {
     }
   }
 
-  private static void loadReaders(Library library){
+  private static void loadReaders(Library library) {
     Map<Long, Book> books = loadMapBooks(library);
     try(BufferedReader bufferedReader = new BufferedReader(new FileReader(READERS_FILE, StandardCharsets.UTF_8))) {
       String line;
       long maxID = 0;
-      while((line = bufferedReader.readLine()) != null){
+      while((line = bufferedReader.readLine()) != null) {
         String[] readerData = line.split(";");
         Reader reader = new Reader(Long.parseLong(readerData[0]),
                 readerData[1],
@@ -117,8 +117,8 @@ public class LibraryDataManager {
                 LocalDate.of(Integer.parseInt(readerData[3]),
                         Integer.parseInt(readerData[4]),
                         Integer.parseInt(readerData[5])));
-        if(readerData.length == 7){
-          for(String bookID : readerData[6].split(",")){
+        if(readerData.length == 7) {
+          for(String bookID : readerData[6].split(",")) {
             Book book = books.get(Long.parseLong(bookID));
             book.setBorrowedBy(reader);
             reader.getBorrowedBooks().add(book);
@@ -133,7 +133,7 @@ public class LibraryDataManager {
     }
   }
 
-  public static void loadReadersAndBooksData(Library library){
+  public static void loadReadersAndBooksData(Library library) {
     loadReaders(library);
   }
 }
