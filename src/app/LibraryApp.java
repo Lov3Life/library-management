@@ -40,9 +40,13 @@ public class LibraryApp {
             0. Close App
             """;
     while(globalFlag) {
-      System.out.println("\nAvailable options:\n");
-      System.out.println(options);
-      int output = getIntInputMenuOptions("Select option: ", "\nInvalid value. Select option: ", 0, 12);
+      int output = getIntInputMenuOptions(
+              options,
+              "\nAvailable options:\n",
+              "Select option: ",
+              "\nInvalid value. Select option: ",
+              0,
+              12);
       switch(output) {
         case 0 -> closeApp();
         case 1 -> addReaderToLibrary();
@@ -78,7 +82,9 @@ public class LibraryApp {
     }
   }
 
-  private int getIntInputMenuOptions(String messageFirst, String messageInvalid, int minVal, int maxVal) {
+  private int getIntInputMenuOptions(String options, String messageBeforeOptions, String messageFirst, String messageInvalid, int minVal, int maxVal) {
+    System.out.println(messageBeforeOptions);
+    System.out.println(options);
     System.out.print(messageFirst);
     int value;
     while(true) {
@@ -220,15 +226,19 @@ public class LibraryApp {
   private void changeReaderData(Reader reader) {
     boolean wantChangeFlag = true;
     while(wantChangeFlag) {
-      System.out.printf("\nSummary:\n %s\n\n", reader.toString());
       String changes = """
               1. Name
               2. Surname
               3. Birth date
               0. save as is (Summary)
               """;
-      System.out.println(changes);
-      int output = getIntInputMenuOptions("Make any changes: ", "\nIncorrect option. Make any changes: ", 0, 3);
+      int output = getIntInputMenuOptions(
+              changes,
+              "\nSummary:\n %s\n\n".formatted(reader.toString()),
+              "Make any changes: ",
+              "\nIncorrect option. Make any changes: ",
+              0,
+              3);
       switch(output) {
         case 1 -> {
           String name = getStringInput("Name: ", false);
@@ -309,7 +319,6 @@ public class LibraryApp {
   private void changeBookData(Book book) {
     boolean wantChangeFlag = true;
     while(wantChangeFlag) {
-      System.out.printf("\nSummary:\n %s \n\n", book.toString());
       String changes = """
               1. Title
               2. Author
@@ -317,8 +326,13 @@ public class LibraryApp {
               4. Publishing year
               0. save as is (Summary)
               """;
-      System.out.println(changes);
-      int output = getIntInputMenuOptions("Make any changes: ", "\nIncorrect option. Make any changes: ", 0, 4);
+      int output = getIntInputMenuOptions(
+              changes,
+              "\nSummary:\n %s \n\n".formatted(book.toString()),
+              "Make any changes: ",
+              "\nIncorrect option. Make any changes: ",
+              0,
+              4);
       switch(output) {
         case 1 -> {
           book.setTitle(getStringInput("Title: ", false));
@@ -426,9 +440,13 @@ public class LibraryApp {
             7. No borrowed books
             8. all readers
             """;
-    System.out.println("Filter options:");
-    System.out.println(filterOptions);
-    int input = getIntInputMenuOptions("Pick option: ", "\nInvalid value. Pick option: ", 1, 8);
+    int input = getIntInputMenuOptions(
+            filterOptions,
+            "Filter options:",
+            "Pick option: ",
+            "\nInvalid value. Pick option: ",
+            1,
+            8);
     switch(input) {
       case 1 -> {
         long id = getLongInput("Enter reader ID:", "Invalid ID, try again: ");
@@ -490,9 +508,13 @@ public class LibraryApp {
             9. No borrowed books
             10. all books
             """;
-    System.out.println("Filter options:");
-    System.out.println(filterOptions);
-    int input = getIntInputMenuOptions("Pick option: ", "\nInvalid value. Pick option: ", 1, 10);
+    int input = getIntInputMenuOptions(
+            filterOptions,
+            "Filter options:",
+            "Pick option: ",
+            "\nInvalid value. Pick option: ",
+            1,
+            10);
     switch(input) {
       case 1 -> {
         long id = getLongInput("Enter book ID:", "Invalid ID, try again: ");
@@ -566,9 +588,14 @@ public class LibraryApp {
             1. Yes
             0. No
             """;
-    System.out.println("\n" + options);
-    int validOutput = getIntInputMenuOptions("Save the entered data: ", "\nInvalid input. Save the entered data: ", 0, 1);
-    switch(validOutput) {
+    int output = getIntInputMenuOptions(
+            options,
+            "",
+            "Save the entered data: ",
+            "\nInvalid input. Save the entered data: ",
+            0,
+            1);
+    switch(output) {
       case 1 -> {
         LibraryDataManager.saveLibraryName(library.getName());
         LibraryDataManager.saveReaders(library.getReaders());
